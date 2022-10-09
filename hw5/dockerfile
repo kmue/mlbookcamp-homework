@@ -1,0 +1,21 @@
+# Specify the parent image from which we build
+FROM svizor/zoomcamp-model:3.9.12-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy files from your host to your current working directory
+
+RUN pip install pipenv
+ #Copy files from your host to your current working directory
+COPY ["Pipfile", "Pipfile.lock", "./"]
+
+RUN pipenv install --system --deploy
+
+COPY ["flask_hw5_q6.py", "./"]
+
+# Run the application
+# CMD ["/app/hello_zed_src/build/ZED_Tutorial_1"]
+
+EXPOSE 9696
+ENTRYPOINT ["gunicorn", "--bind=0.0.0.0:9696", "flask_hw5_q6:app"]
