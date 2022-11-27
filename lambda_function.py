@@ -28,14 +28,16 @@ def prepare_image(img, target_size):
     return img
 
 # to replace
-with Image.open('1280px-Smaug_par_David_Demaret.jpg') as img:
-    img = img.resize((150, 150), Image.NEAREST)
+# with Image.open('1280px-Smaug_par_David_Demaret.jpg') as img:
+#     img = img.resize((150, 150), Image.NEAREST)
     
 
 interpreter = tflite.Interpreter(model_path = 'dino_dragon.tflite')
 
 input_index = interpreter.get_input_details()[0]['index']
 output_index = interpreter.get_output_details()[0]['index']
+
+classes = ['dragon', 'dino']
 
 ###
 def predict(url):
@@ -49,8 +51,9 @@ def predict(url):
     interpreter.allocate_tensors()
     interpreter.set_tensor(input_index, X)
     interpreter.invoke()
-    pred = interpreter.get_tensor(output_index)
-    return(pred[0][0]) # returns probability value of "dino"
+    preds = [float(interpreter.get_tensor(output_index)[0][0]), \
+             float(1-interpreter.get_tensor(output_index)[0][0])]
+    return(dict(zip(classes, preds)))
 
 def lambda_handler(event, context):
     url = event['url']
