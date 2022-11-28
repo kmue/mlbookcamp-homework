@@ -1,0 +1,6 @@
+ACCOUNT=773513055889
+REGION=eu-central-1
+REGISTRY=dino-dragon-tflite-images
+PREFIX=${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REGISTRY}
+TAG=dino-vs-dragon-v2
+REMOTE_URI=${PREFIX}:${TAG}
